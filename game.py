@@ -55,7 +55,13 @@ class Game:
     def update(self, dt, current_time):
         mouse_pos = pygame.mouse.get_pos()
         self.tank.aim(mouse_pos)
+
+        old_pos = pygame.Vector2(self.tank.pos)
         self.tank_group.update(dt)
+        if self.collision_manager.resolve_tank_target(self.tank, self.targets_group):
+            self.tank.pos = old_pos
+            self.tank.rect.center = (int(old_pos.x), int(old_pos.y))
+
         self.targets_group.update(dt)
         self.projectiles_group.update(dt)
         self.collision_manager.check(

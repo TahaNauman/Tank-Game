@@ -11,3 +11,7 @@ class CollisionManager:
                 destroyed = target.take_damage(projectile.damage)
                 if destroyed:
                     score_manager.add_score(TARGET_SCORE)
+
+    def resolve_tank_target(self, tank, targets_group):
+        hits = pygame.sprite.spritecollide(tank, targets_group, False)
+        return len(hits) > 0

@@ -37,5 +37,14 @@ class HUD:
         pygame.draw.rect(screen, bar_color, (bar_x, bar_y, fill_width, bar_height))
         pygame.draw.rect(screen, WHITE, (bar_x, bar_y, bar_width, bar_height), 2)
 
-        controls = self.tiny_font.render("WASD: Move | LMB: Shoot | ESC: Quit", True, (150, 150, 150))
+        weapon_name = self.tank.weapon.name if self.tank.weapon else "None"
+        weapon_text = self.small_font.render(
+            f"Weapon: {weapon_name}  [1] [2]", True, (200, 200, 100)
+        )
+        screen.blit(weapon_text, (10, 80))
+
+        controls = self.tiny_font.render(
+            "WASD: Move | LMB: Shoot | 1/2: Weapon | ESC: Quit",
+            True, (150, 150, 150)
+        )
         screen.blit(controls, (10, SCREEN_HEIGHT - 30))

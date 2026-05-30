@@ -4,6 +4,7 @@ from sprites.tank import Tank
 from sprites.target import Target
 from sprites.projectile import Projectile
 from weapons.bullet_weapon import BulletWeapon
+from weapons.rocket_weapon import RocketWeapon
 from managers.spawner import Spawner
 from managers.collision_manager import CollisionManager
 from managers.score_manager import ScoreManager
@@ -19,9 +20,11 @@ class Game:
         self.tank_group = pygame.sprite.Group()
         self.targets_group = pygame.sprite.Group()
         self.projectiles_group = pygame.sprite.Group()
+        self.explosions_group = pygame.sprite.Group()
 
         self.tank = Tank((SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-        self.tank.weapon = BulletWeapon()
+        self.tank.add_weapon(BulletWeapon())
+        self.tank.add_weapon(RocketWeapon())
         self.tank_group.add(self.tank)
 
         self.spawner = Spawner()
@@ -46,6 +49,10 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
+                elif event.key == pygame.K_1:
+                    self.tank.switch_weapon(0)
+                elif event.key == pygame.K_2:
+                    self.tank.switch_weapon(1)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     projectile = self.tank.fire(current_time)
@@ -64,8 +71,10 @@ class Game:
 
         self.targets_group.update(dt)
         self.projectiles_group.update(dt)
+        self.explosions_group.update(dt)
         self.collision_manager.check(
-            self.projectiles_group, self.targets_group, self.score_manager
+            self.projectiles_group, self.targets_group,
+            self.score_manager, self.explosions_group
         )
         self.spawner.update(dt, self.targets_group, self.tank.pos)
 
@@ -75,5 +84,6 @@ class Game:
         self.tank_group.draw(self.screen)
         self.tank.draw_turret(self.screen)
         self.projectiles_group.draw(self.screen)
+        self.explosions_group.draw(self.screen)
         self.hud.draw(self.screen)
         pygame.display.flip()

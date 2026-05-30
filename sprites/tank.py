@@ -16,7 +16,21 @@ class Tank(pygame.sprite.Sprite):
         self.angle = 0.0
         self.health = TANK_HEALTH
         self.max_health = TANK_HEALTH
-        self.weapon = None
+        self.weapons = []
+        self.current_weapon_index = 0
+
+    @property
+    def weapon(self):
+        if self.weapons:
+            return self.weapons[self.current_weapon_index]
+        return None
+
+    def add_weapon(self, weapon):
+        self.weapons.append(weapon)
+
+    def switch_weapon(self, index):
+        if 0 <= index < len(self.weapons):
+            self.current_weapon_index = index
 
     def update(self, dt):
         keys = pygame.key.get_pressed()

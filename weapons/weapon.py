@@ -1,7 +1,8 @@
 class Weapon:
-    def __init__(self, fire_rate, damage):
+    def __init__(self, fire_rate, damage, name="Weapon"):
         self.fire_rate = fire_rate
         self.damage = damage
+        self.name = name
         self.last_shot_time = -fire_rate
 
     def can_fire(self, current_time):
